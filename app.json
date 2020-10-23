@@ -21,6 +21,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Hey its my first e-commerce react native app",
+    "githubUrl": "https://github.com/Aneerudh2k2/Marketzz.git"
   }
 }
