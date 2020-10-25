@@ -9,6 +9,7 @@ import SignUpScreen from "./screens/SignUpScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import LoginScreen from "./screens/LoginScreen";
 import LoadingScreen from "./screens/LoadingScreen";
+import HomeScreen from "./screens/HomeScreen";
 import * as firebase from "firebase";
 import { firebaseConfig } from "./config";
 
@@ -84,6 +85,14 @@ export default function App({ navigation }) {
         <Stack.Screen
           name="Loading"
           component={LoadingScreen}
+          options={{
+            header: () => null,
+          }}
+        />
+
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
           options={{
             header: () => null,
           }}

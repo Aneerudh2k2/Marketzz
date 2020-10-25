@@ -1,5 +1,13 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Button,
+  StyleSheet,
+} from "react-native";
+import * as Google from "expo-google-app-auth";
 import FormInput from "../components/FormInput";
 import FormButton from "../components/FormButton";
 import SocialButton from "../components/SocialButton";
@@ -15,20 +23,25 @@ const LoginScreen = ({ navigation, props }) => {
 
   const signInWithGoogleAsync = async () => {
     try {
-      const result = await Expo.Google.logInAsync({
+      console.log("google called");
+      const result = await Google.logInAsync({
         behaviour: "web",
         androidClientId:
           "806210984554-ecd9fdca06tmdh3rnsobs9b4g9978qo8.apps.googleusercontent.com",
         scopes: ["profile", "email"],
       });
-
+      console.log();
       if (result.type === "success") {
+        console.log("onSign called");
         onSignIn(result);
         return result.accessToken;
       } else {
+        console.log("else part");
         return { cancelled: true };
       }
     } catch (e) {
+      console.log("catch part");
+      console.log(e);
       return { error: true };
     }
   };
@@ -150,7 +163,9 @@ const LoginScreen = ({ navigation, props }) => {
         btnType="google"
         color="#de4d41"
         backgroundColor="#f5e7ea"
-        onPress={signInWithGoogleAsync}
+        onPress={() => {
+          signInWithGoogleAsync();
+        }}
       />
 
       <TouchableOpacity

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, ActivityIndicator } from "react-native";
 import firebase from "firebase";
+import * as Google from "expo-google-app-auth";
 
 class LoadingScreen extends Component {
   componentDidMount() {
