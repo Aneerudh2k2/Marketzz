@@ -1,19 +1,71 @@
 import React from "react";
+import * as firebase from "firebase";
 import { StyleSheet, Text, View, Button, LogBox } from "react-native";
-import firebase from "firebase";
-import FormButton from "../components/FormButton";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import DashboardScreen from "../Home/DashboardScreen";
+import CanteenScreen from "../Home/CanteenScreen";
+import BookingScreen from "../Home/BookingScreen";
+import EcommerceScreen from "../Home/EcommerceScreen";
+console.log("Rendering", MaterialCommunityIcons);
+const Tab = createMaterialBottomTabNavigator();
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
+  const stationeryIcon = require("../assets/icon/stationery.svg");
   return (
-    <View style={styles.signout}>
-      <TouchableOpacity
-        style={styles.signoutButton}
-        onPress={() => firebase.auth().signOut()}
-      >
-        <Text style={{ color: "#2274a5", fontSize: 18 }}>Sign Out</Text>
-      </TouchableOpacity>
-    </View>
+    <Tab.Navigator
+      activeColor="#f0edf6"
+      inactiveColor="#3e2465"
+      backBehavior="history"
+      barStyle={styles.tab}
+    >
+      <Tab.Screen
+        name="Dashboard"
+        component={DashboardScreen}
+        options={{
+          tabBarIcon: () => {
+            return <FontAwesome name="home" size={26} color="#fff" />;
+          },
+          tabBarColor: "#414288",
+        }}
+      />
+
+      <Tab.Screen
+        name="Canteen"
+        component={CanteenScreen}
+        options={{
+          tabBarIcon: () => {
+            return (
+              <MaterialCommunityIcons name="food" size={28} color="#fff" />
+            );
+          },
+          tabBarColor: "#ff3f00",
+        }}
+      />
+
+      <Tab.Screen
+        name="Ecommerce"
+        component={EcommerceScreen}
+        options={{
+          tabBarLabel: "Buy and Sell",
+          tabBarIcon: () => {
+            return <FontAwesome name="shopping-bag" size={26} color="#fff" />;
+          },
+          tabBarColor: "#453f3c",
+        }}
+      />
+
+      <Tab.Screen
+        name="Stationary"
+        component={BookingScreen}
+        options={{
+          tabBarIcon: () => {
+            return <FontAwesome name="paperclip" size={26} color="#fff" />;
+          },
+          tabBarColor: "#ade25d",
+        }}
+      />
+    </Tab.Navigator>
   );
 };
 
@@ -32,5 +84,9 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingHorizontal: 50,
     backgroundColor: "#afd2e9",
+  },
+  tab: {
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
 });

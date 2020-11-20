@@ -6,20 +6,52 @@ import {
   Image,
   Button,
   StyleSheet,
+  LogBox,
 } from "react-native";
 import * as Google from "expo-google-app-auth";
 import FormInput from "../components/FormInput";
 import FormButton from "../components/FormButton";
 import SocialButton from "../components/SocialButton";
 import { Dimensions } from "react-native";
-import firebase from "firebase";
-import { ReactNativeFirebase } from "@react-native-firebase/app";
+import * as firebase from "firebase";
+
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 const LoginScreen = ({ navigation, props }) => {
   const [email, setEmail] = React.useState();
   const [password, setPassword] = React.useState();
+
+  const signInWithMail = (email, password) => {
+    console.log("signinwithmail called");
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((result) => {
+        if (result.additionalUserInfo.isNewUser) {
+          firebase
+            .database()
+            .ref("/newuserwithEmail/" + result.user.uid)
+            .set({
+              mailid: result.user.email,
+              password: result.additionalUserInfo.username,
+              created_at: Date.now(),
+            });
+        }
+        firebase
+          .database()
+          .ref("/newuserwithEmail/" + result.user.uid)
+          .update({
+            last_logged_in: Date.now(),
+          });
+      })
+      .catch(function (error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ...
+      });
+  };
 
   const signInWithGoogleAsync = async () => {
     try {
@@ -144,19 +176,17 @@ const LoginScreen = ({ navigation, props }) => {
         onChangeText={(userPass) => setPassword(userPass)}
       />
 
-      <FormButton buttonTitle="Sign in" onPress={() => alert("Signed in")} />
+      <FormButton
+        buttonTitle="Sign in"
+        onPress={() => {
+          console.log("signin button called");
+          signInWithMail(email, password);
+        }}
+      />
 
       <TouchableOpacity style={styles.forgotButton} onPress={() => {}}>
         <Text style={styles.navButtonText}>Forgot Password?</Text>
       </TouchableOpacity>
-
-      <SocialButton
-        buttonTitle="Sign in with Facebook"
-        btnType="facebook"
-        color="#4867aa"
-        backgroundColor="#e6eaf4"
-        onPress={() => {}}
-      />
 
       <SocialButton
         buttonTitle="Sign in with Google"
